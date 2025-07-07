@@ -1,40 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login - AdptNXT</title>
-  <link rel="stylesheet" href="styles.css">
-
+  <meta charset="UTF-8" />
+  <title>Login</title>
 </head>
 <body>
   <h1>Login</h1>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <p>Don't have an account? <a href="register.html">Register</a></p>
-
+  <form onsubmit="login(); return false;">
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="password" placeholder="Password" required><br>
+    <button type="submit">Login</button>
+  </form>
   <script>
     function login() {
-      fetch('https://adptnxt-ecommerce.onrender.com/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: document.getElementById('email').value,
-          password: document.getElementById('password').value
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (!data.token) return alert('Invalid login');
-        const payload = JSON.parse(atob(data.token.split('.')[1]));
-        localStorage.setItem('token', data.token);
-
-        if (payload.role === 'admin') {
-          window.location.href = 'admin.html';
-        } else {
-          window.location.href = 'home.html';
-        }
-      });
+      alert('Login functionality here');
     }
   </script>
 </body>
