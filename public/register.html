@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - AdptNXT</title>
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+  <h1>Register</h1>
+  <input type="text" id="name" placeholder="Name">
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="register()">Register</button>
+  <p>Already have an account? <a href="login.html">Login</a></p>
+
+  <script>
+    function register() {
+      fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value
+        })
+      }).then(res => res.json()).then(data => {
+        alert('Registered successfully');
+        window.location.href = 'login.html';
+      });
+    }
+  </script>
+</body>
+</html>
+
+// public/login.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - AdptNXT</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <p>Don't have an account? <a href="register.html">Register</a></p>
+
+  <script>
+    function login() {
+      fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value
+        })
+      }).then(res => res.json()).then(data => {
+        localStorage.setItem('token', data.token);
+        window.location.href = 'home.html';
+      });
+    }
+  </script>
+</body>
+</html>

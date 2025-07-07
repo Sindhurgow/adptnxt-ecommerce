@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home - AdptNXT</title>
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+  <h1>AdptNXT E-commerce</h1>
+  <button onclick="logout()">Logout</button>
+  <h2>Products</h2>
+  <div id="productList"></div>
+  <h2>Cart</h2>
+  <div id="cartItems"></div>
+  <button onclick="placeOrder()">Place Order</button>
+  <h2>Orders</h2>
+  <div id="orderList"></div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'login.html';
+
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = 'login.html';
+    }
+
+    function loadProducts() {
+      fetch('/api/products')
+        .then(res => res.json())
+        .then(products => {
+          const list = document.getElementById('productList');
+          list.innerHTML = '';
+          products.forEach(p => {
+            list.innerHTML += `
+              <div>
+                <b>${p.name}</b> - ₹${p.price}
+                <button onclick="addToCart(${p.id})">Add to Cart</button>
+              </div>`;
+          });
+        });
+    }
+
+    function addToCart(id) {
+      fetch('/api/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        },
+        body: JSON.stringify({ productId: id, quantity: 1 })
+      }).then(loadCart);
+    }
+
+    function loadCart() {
+      fetch('/api/cart', {
+        headers: { Authorization: 'Bearer ' + token }
+      })
+        .then(res => res.json())
+        .then(items => {
+          const cart = document.getElementById('cartItems');
+          cart.innerHTML = '';
+          items.forEach(i => {
+            cart.innerHTML += `<div>${i.name} x ${i.quantity}</div>`;
+          });
+        });
+    }
+
+    function placeOrder() {
+      fetch('/api/orders', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + token }
+      })
+        .then(res => res.json())
+        .then(data => {
+          alert('Order placed! ID: ' + data.orderId);
+          loadOrders();
+          loadCart();
+        });
+    }
+
+    function loadOrders() {
+      fetch('/api/orders', {
+        headers: { Authorization: 'Bearer ' + token }
+      })
+        .then(res => res.json())
+        .then(orders => {
+          const list = document.getElementById('orderList');
+          list.innerHTML = '';
+          orders.forEach(o => {
+            list.innerHTML += `<div>Order #${o.id} - ₹${o.total}</div>`;
+          });
+        });
+    }
+
+    loadProducts();
+    loadCart();
+    loadOrders();
+  </script>
+</body>
+</html>
