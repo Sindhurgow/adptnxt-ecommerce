@@ -27,7 +27,7 @@
     }
 
     function loadProducts() {
-      fetch('/api/products')
+      fetch('https://adptnxt-ecommerce.onrender.com/api/products')
         .then(res => res.json())
         .then(products => {
           const list = document.getElementById('productList');
@@ -43,7 +43,7 @@
     }
 
     function addToCart(id) {
-      fetch('/api/cart', {
+      fetch('https://adptnxt-ecommerce.onrender.com/api/cart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@
     }
 
     function loadCart() {
-      fetch('/api/cart', {
+      fetch('https://adptnxt-ecommerce.onrender.com/api/cart', {
         headers: { Authorization: 'Bearer ' + token }
       })
         .then(res => res.json())
@@ -68,7 +68,7 @@
     }
 
     function placeOrder() {
-      fetch('/api/orders', {
+      fetch('https://adptnxt-ecommerce.onrender.com/api/orders', {
         method: 'POST',
         headers: { Authorization: 'Bearer ' + token }
       })
@@ -81,7 +81,7 @@
     }
 
     function loadOrders() {
-      fetch('/api/orders', {
+      fetch('https://adptnxt-ecommerce.onrender.com/api/orders', {
         headers: { Authorization: 'Bearer ' + token }
       })
         .then(res => res.json())
